@@ -1,7 +1,7 @@
 $todo_list = []
 
 def setup
-  puts 'Todo List v0.2'
+  puts 'Todo List v0.3'
 end
 
 def finished()
@@ -48,6 +48,7 @@ def main_loop()
     line = gets.chomp
     if line == 'Q'
       finished = true
+      finished()
     else
       parse_command(line)
     end
