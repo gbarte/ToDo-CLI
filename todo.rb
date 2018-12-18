@@ -1,7 +1,7 @@
 $todo_list = []
 
 def setup
-  puts 'Todo List v0.01'
+  puts 'Todo List v0.2'
 end
 
 def finished()
@@ -11,27 +11,31 @@ end
 def add_todo(todo)
   if todo == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
-  else
+  else 
     $todo_list.push [0, todo]
   end
 end 
 
 def list_todo()
   $todo_list.each.with_index do |todo, index|
-    puts "  #{index}: #{todo}"
+      puts "  #{index} (#{todo[0]}) #{todo[1]}"
   end
 end
 
 def parse_command(line)
-  letter = line[0]
-  stripped = line[1..-1].strip
-  case letter
-  when 'A'
-    add_todo(stripped)
-  when 'L'
-    list_todo()
+  if line == ''
+    puts '  :| Nothing to Add - Try \'A todo description\''
   else
-    puts 'Commands: Q-uit A-dd L-ist H-elp'
+    letter = line[0]
+    stripped = line[1..-1].strip
+    case letter
+    when 'A'
+      add_todo(stripped)
+    when 'L'
+      list_todo()
+    else
+      puts 'Commands: Q-uit A-dd L-ist H-elp'
+    end
   end
 end
 
@@ -42,7 +46,7 @@ def main_loop()
   while !finished
     print ":) "
     line = gets.chomp
-    if line == 'X'
+    if line == 'Q'
       finished = true
     else
       parse_command(line)
