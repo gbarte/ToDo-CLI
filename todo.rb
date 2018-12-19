@@ -28,13 +28,15 @@ def add_todo(todo)
   end
 end 
 
-def list_todo()
-  if $todo_list.length > 0
+def list_todo(find)
+  if $todo_list.length == 0
+    puts '  :| You haven\'t created a list yet - Try \'A todo description\''
+  elsif find.length > 0
+      find_todo(find)
+  else
     $todo_list.each.with_index do |todo, index|
       puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
     end
-  else
-    puts '  :| You haven\'t created a list yet - Try \'A todo description\''
   end
 end
 
@@ -87,6 +89,19 @@ def delete_todo(input)
   end
 end
 
+def find_todo(find)
+  found = 0
+  $todo_list.each.with_index do |todo, index|
+    if todo[INDEX_T].upcase[find.upcase]
+      puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
+      found += 1
+    end 
+  end
+  if found == 0
+    puts '  :| No matching Todos'
+  end
+end
+
 def parse_command(line)
   if line == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
@@ -97,7 +112,7 @@ def parse_command(line)
     when 'A'
       add_todo(stripped)
     when 'L'
-      list_todo()
+      list_todo(stripped)
     when 'P'
       set_priority(stripped)
     when '+'
