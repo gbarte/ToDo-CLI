@@ -13,7 +13,7 @@ INDEX_P = 0;
 INDEX_T = 1;
 
 def setup
-  puts 'Todo List v0.05'
+  puts 'Todo List v0.05.1'
 end
 
 def finished()
@@ -28,7 +28,7 @@ def add_todo(task)
   else
     $todo_list.each.with_index do |todo, index|
       if todo[INDEX_P] <= $priority
-        $todo_list.insert(place, [$priority, task])
+        $todo_list.insert(index, [$priority, task])
         break
       end
     end
@@ -109,6 +109,10 @@ def find_todo(find)
   end
 end
 
+def tidy_todo()
+    
+end
+
 def parse_command(line)
   if line == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
@@ -128,6 +132,8 @@ def parse_command(line)
       list_todo_from(stripped)
     when 'D'
       delete_todo(stripped)
+    when 'T'
+      tidy_todo(stripped)
     else
       puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete'
     end
