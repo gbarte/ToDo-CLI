@@ -13,7 +13,7 @@ INDEX_P = 0;
 INDEX_T = 1;
 
 def setup
-  puts 'Todo List v0.06'
+  puts 'Todo List v0.07'
 end
 
 def finished()
@@ -27,9 +27,17 @@ def add_todo(task)
     $todo_list.push [$priority, task]
   else
     $todo_list.each.with_index do |todo, index|
-      if todo[INDEX_P] <= $priority
+      if todo[INDEX_P] < $priority
         $todo_list.insert(index, [$priority, task])
         break
+      elsif $todo_list[index][INDEX_P] == $priority
+        if index+1 == $todo_list.length
+          $todo_list.push [$priority, task]
+          break
+        elsif $todo_list[index+1][INDEX_P] < $priority
+          $todo_list.insert(index+1, [$priority, task])
+          break
+        end
       end
     end
   end
@@ -47,8 +55,14 @@ def list_todo(find)
   end
 end
 
+def show_priority()
+  puts "  Priority is currently #{$priority}"
+end
+
 def set_priority(input)
-  if input.between?(P_MIN,P_MAX) && input.length == 1
+  if input == ""
+    show_priority()
+  elsif input.between?(P_MIN,P_MAX) && input.length == 1
     number = input.to_i
     $priority = number
   else 
@@ -164,9 +178,7 @@ def main_loop()
   while !finished
     print ':)'
     line = gets.chomp
-    if line == 'P'
-        puts "  Priority is currently #{$priority}"
-    elsif line == 'Q'
+    if line == 'Q'
       finished = true
       finished()
     else
