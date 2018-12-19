@@ -13,7 +13,7 @@ INDEX_P = 0;
 INDEX_T = 1;
 
 def setup
-  puts 'Todo List v0.05.1'
+  puts 'Todo List v0.06'
 end
 
 def finished()
@@ -110,7 +110,24 @@ def find_todo(find)
 end
 
 def tidy_todo()
-    
+  if $todo_list.length == 0
+      puts 'There is no list to tidy - Try \'A todo description\''
+  else
+    i = 0
+    while i < $todo_list.length
+      j = i + 1
+      while j < $todo_list.length
+        if $todo_list[i][INDEX_T].upcase == $todo_list[j][INDEX_T].upcase
+          if $todo_list[i][INDEX_P] >= $todo_list[j][INDEX_P]
+            delete_todo(j.to_s)
+            j -= 1
+          end
+        end
+        j += 1
+      end
+      i += 1
+    end
+  end
 end
 
 def parse_command(line)
@@ -133,7 +150,7 @@ def parse_command(line)
     when 'D'
       delete_todo(stripped)
     when 'T'
-      tidy_todo(stripped)
+      tidy_todo()
     else
       puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete'
     end
