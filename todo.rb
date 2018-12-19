@@ -13,18 +13,25 @@ INDEX_P = 0;
 INDEX_T = 1;
 
 def setup
-  puts 'Todo List v0.04'
+  puts 'Todo List v0.05'
 end
 
 def finished()
   puts 'Bye...'
 end
 
-def add_todo(todo)
-  if todo == ''
+def add_todo(task)
+  if task == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
-  else 
-    $todo_list.push [$priority, todo]
+  elsif $todo_list.length == 0
+    $todo_list.push [$priority, task]
+  else
+    $todo_list.each.with_index do |todo, index|
+      if todo[INDEX_P] <= $priority
+        $todo_list.insert(place, [$priority, task])
+        break
+      end
+    end
   end
 end 
 
