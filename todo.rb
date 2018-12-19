@@ -13,7 +13,7 @@ INDEX_P = 0;
 INDEX_T = 1;
 
 def setup
-  puts 'Todo List v0.03'
+  puts 'Todo List v0.04'
 end
 
 def finished()
@@ -38,18 +38,18 @@ def list_todo()
   end
 end
 
-def set_priority(number)
-  if number.between?(P_MIN,P_MAX) && number.length == 1
-    number = number.to_i
+def set_priority(input)
+  if input.between?(P_MIN,P_MAX) && input.length == 1
+    number = input.to_i
     $priority = number
   else 
     puts '  :( Priority must be 0 to 9'
   end
 end
 
-def increase_priority(string)
-  index = string.to_i
-  if index == 0 && string != "0"
+def increase_priority(input)
+  index = input.to_i
+  if index == 0 && input != "0"
     puts '  :( The index of a task is a number'
   elsif !index.between?(0,$todo_list.length-1)
     puts '  :( There is no task with such index'
@@ -60,11 +60,11 @@ def increase_priority(string)
   end
 end
 
-def list_todo_from(number)
+def list_todo_from(input)
   if $todo_list.length == 0
     puts '  :| You haven\'t created a list yet - Try \'A todo description\''
-  elsif number.between?(P_MIN,P_MAX) && number.length == 1
-    number = number.to_i
+  elsif input.between?(P_MIN,P_MAX) && input.length == 1
+    number = input.to_i
     $todo_list.each.with_index do |todo, index|
       if todo[INDEX_P] >= number
         puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
@@ -72,6 +72,18 @@ def list_todo_from(number)
     end
   else 
     puts '  :( Priority values are from 0 to 9'
+  end
+end
+
+def delete_todo(input)
+  index = input.to_i
+  if index == 0 && input != "0"
+    puts '  :( The index of a task is a number'
+  elsif !index.between?(0,$todo_list.length-1)
+    puts '  :( There is no task with such index'
+  else
+    $todo_list.delete_at(index)
+    puts "List item at index #{index} deleted"
   end
 end
 
@@ -92,8 +104,10 @@ def parse_command(line)
       increase_priority(stripped)
     when '='
       list_todo_from(stripped)
+    when 'D'
+      delete_todo(stripped)
     else
-      puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority'
+      puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete'
     end
   end
 end
