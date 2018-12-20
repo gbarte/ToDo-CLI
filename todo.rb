@@ -15,7 +15,7 @@ INDEX_P = 0
 INDEX_T = 1
 
 def setup
-  puts 'Todo List v1.0'
+  puts 'Todo List v1.1'
 end
 
 def finished()
@@ -160,6 +160,23 @@ def tidy_todo()
   end
 end
 
+def help()
+  puts '  Welcome!'
+  puts '  This is a program to make a todo list'
+  puts '  Start by adding a task to your list by typing \'A <todo description>'
+  puts '  The default priority value for your tasks is 0'
+  puts '  To change it type P <value>'
+  puts '  *** <value> can only be an integer from 0 to 9'
+  puts '  To increase the priority value of a list item by 1 type + <index>'
+  puts '  To view your todo list type L'
+  puts '  To view only the tasks of a chosen priority or higher type = <value>'
+  puts '  \'L <find>\' lists only todos which have the word <find> in them'
+  puts '  To delete a task from the list type D <index_of_task>'
+  puts '  type \'T\' to tidy your code from duplicating tasks,'\
+       ' the task with higher priority will be kept'
+  puts '  Q - quits the application'
+end
+
 def parse_command(line)
   if line == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
@@ -181,6 +198,8 @@ def parse_command(line)
       delete_todo(stripped)
     when 'T'
       tidy_todo()
+    when 'H'
+      help()
     else
       puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete, T-idy'
     end
