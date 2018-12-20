@@ -1,35 +1,41 @@
-$todo_list = []
+# Individual Assignemnt for COM1001
+# By Gabriele Barteskaite
+# Username: acb18gb
 
+#Declaration of global 
+$todo_list = []
 #default priority value:
 $priority = 0
-
 #smallest and largest possible priority values (as chars for easier testing):
 P_MIN = '0'
 P_MAX = '9'
-
 #index of priority value in an element of the todo list
-INDEX_P = 0;
+INDEX_P = 0
 #index of task description in an element of the todo list
-INDEX_T = 1;
+INDEX_T = 1
 
 def setup
-  puts 'Todo List v0.07'
+  puts 'Todo List v1.0'
 end
 
 def finished()
   puts 'Bye...'
 end
 
+# Adding new elements to list
 def add_todo(task)
   if task == ''
     puts '  :| Nothing to Add - Try \'A todo description\''
   elsif $todo_list.length == 0
+    #if first list element
     $todo_list.push [$priority, task]
   else
+    #finding the right place for new task
     $todo_list.each.with_index do |todo, index|
       if todo[INDEX_P] < $priority
         $todo_list.insert(index, [$priority, task])
         break
+      #tasks of same priority listed from the one added first to last
       elsif $todo_list[index][INDEX_P] == $priority
         if index+1 == $todo_list.length
           $todo_list.push [$priority, task]
@@ -41,12 +47,14 @@ def add_todo(task)
       end
     end
   end
-end 
+end
 
+# Printing the list
 def list_todo(find)
   if $todo_list.length == 0
     puts '  :| You haven\'t created a list yet - Try \'A todo description\''
   elsif find.length > 0
+      #if there is anything after the letter L proceed to
       find_todo(find)
   else
     $todo_list.each.with_index do |todo, index|
@@ -55,21 +63,25 @@ def list_todo(find)
   end
 end
 
-def show_priority()
-  puts "  Priority is currently #{$priority}"
-end
-
+# Setting a new value of priority
 def set_priority(input)
   if input == ""
     show_priority()
+  # changing value only if new value is within bounds
   elsif input.between?(P_MIN,P_MAX) && input.length == 1
     number = input.to_i
     $priority = number
-  else 
+  else
     puts '  :( Priority must be 0 to 9'
   end
 end
 
+# Printing priority value
+def show_priority()
+  puts "  Priority is currently #{$priority}"
+end
+
+# Increasing priority by 1 at specified index
 def increase_priority(input)
   index = input.to_i
   if index == 0 && input != "0"
@@ -83,6 +95,7 @@ def increase_priority(input)
   end
 end
 
+# List all todos with specified priority and higher 
 def list_todo_from(input)
   if $todo_list.length == 0
     puts '  :| You haven\'t created a list yet - Try \'A todo description\''
@@ -91,13 +104,14 @@ def list_todo_from(input)
     $todo_list.each.with_index do |todo, index|
       if todo[INDEX_P] >= number
         puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
-      end 
+      end
     end
-  else 
+  else
     puts '  :( Priority values are from 0 to 9'
   end
 end
 
+# Deleting list item at specified index
 def delete_todo(input)
   index = input.to_i
   if index == 0 && input != "0"
@@ -110,19 +124,21 @@ def delete_todo(input)
   end
 end
 
+# List only todos that have <find> within them
 def find_todo(find)
   found = 0
   $todo_list.each.with_index do |todo, index|
     if todo[INDEX_T].upcase[find.upcase]
       puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
       found += 1
-    end 
+    end
   end
   if found == 0
     puts '  :| No matching Todos'
   end
 end
 
+# Removing repetitive todos
 def tidy_todo()
   if $todo_list.length == 0
       puts 'There is no list to tidy - Try \'A todo description\''
@@ -131,11 +147,11 @@ def tidy_todo()
     while i < $todo_list.length
       j = i + 1
       while j < $todo_list.length
-        if $todo_list[i][INDEX_T].upcase == $todo_list[j][INDEX_T].upcase
-          if $todo_list[i][INDEX_P] >= $todo_list[j][INDEX_P]
+        if $todo_list[i][INDEX_T].upcase == $todo_list[j][INDEX_T].upcase \
+          && $todo_list[i][INDEX_P] >= $todo_list[j][INDEX_P]
             delete_todo(j.to_s)
+            # decreasing j because of the index shift in the array
             j -= 1
-          end
         end
         j += 1
       end
@@ -166,7 +182,7 @@ def parse_command(line)
     when 'T'
       tidy_todo()
     else
-      puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete'
+      puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete, T-idy'
     end
   end
 end
@@ -187,5 +203,5 @@ def main_loop()
   end
   exit
 end
-  
+
 main_loop()
