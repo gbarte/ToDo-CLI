@@ -7,7 +7,7 @@ The program shows a happy :) sad :( or indifferent :| ‘face’ based on whethe
 
 ### Commands
  - **A\<description\>** &mdash; add new task
- - **L** &mdash; shows the current todo list
+ - **L** &mdash; shows the current todo list sorted descendingly according to priority
  - **P\<value\>** &mdash; set priotity value which can be from 0 to 9, 0 being default
  - **P** &mdash; display current priority value
  - **+\<index\>** &mdash; increase the priority value of a list item by 1 at specified index
