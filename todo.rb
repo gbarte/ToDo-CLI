@@ -14,12 +14,59 @@ INDEX_P = 0
 #index of task description in an element of the todo list
 INDEX_T = 1
 
+# The main command loop
+def main_loop()
+  setup()
+  finished = false
+  while !finished
+    print ':)'
+    line = gets.chomp
+    if line == 'Q'
+      finished = true
+      finished()
+    else
+      parse_command(line)
+    end
+  end
+  exit
+end
+
 def setup
-  puts 'Todo List v1.1'
+  puts 'Todo List v1.1.1'
+  puts 'Type \'H\' to get started'
 end
 
 def finished()
   puts 'Bye...'
+end
+
+def parse_command(line)
+  if line == ''
+    puts '  :| Nothing to Add - Try \'A todo description\''
+  else
+    letter = line[0]
+    stripped = line[1..-1].strip
+    case letter
+    when 'A'
+      add_todo(stripped)
+    when 'L'
+      list_todo(stripped)
+    when 'P'
+      set_priority(stripped)
+    when '+'
+      increase_priority(stripped)
+    when '='
+      list_todo_from(stripped)
+    when 'D'
+      delete_todo(stripped)
+    when 'T'
+      tidy_todo()
+    when 'H'
+      help()
+    else
+      puts 'Commands: Q-uit, H-elp, A-dd, L-ist, P-riority, D-elete, T-idy'
+    end
+  end
 end
 
 # Adding new elements to list
@@ -60,6 +107,20 @@ def list_todo(find)
     $todo_list.each.with_index do |todo, index|
       puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
     end
+  end
+end
+
+# List only todos that have <find> within them
+def find_todo(find)
+  found = 0
+  $todo_list.each.with_index do |todo, index|
+    if todo[INDEX_T].upcase[find.upcase]
+      puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
+      found += 1
+    end
+  end
+  if found == 0
+    puts '  :| No matching Todos'
   end
 end
 
@@ -124,20 +185,6 @@ def delete_todo(input)
   end
 end
 
-# List only todos that have <find> within them
-def find_todo(find)
-  found = 0
-  $todo_list.each.with_index do |todo, index|
-    if todo[INDEX_T].upcase[find.upcase]
-      puts "  #{index} (#{todo[INDEX_P]}) #{todo[INDEX_T]}"
-      found += 1
-    end
-  end
-  if found == 0
-    puts '  :| No matching Todos'
-  end
-end
-
 # Removing repetitive todos
 def tidy_todo()
   if $todo_list.length == 0
@@ -162,65 +209,19 @@ end
 
 def help()
   puts '  Welcome!'
-  puts '  This is a program to make a todo list'
-  puts '  Start by adding a task to your list by typing \'A <todo description>'
+  puts '  This is a program for making a todo list'
+  puts '  Start by adding a task to your list by typing \'A <todo description>\' '
+  puts '  To view your todo list type \'L\' '
+  puts '  \'L <find>\' lists only todos which have the text <find> in them'
   puts '  The default priority value for your tasks is 0'
-  puts '  To change it type P <value>'
-  puts '  *** <value> can only be an integer from 0 to 9'
-  puts '  To increase the priority value of a list item by 1 type + <index>'
-  puts '  To view your todo list type L'
-  puts '  To view only the tasks of a chosen priority or higher type = <value>'
-  puts '  \'L <find>\' lists only todos which have the word <find> in them'
-  puts '  To delete a task from the list type D <index_of_task>'
-  puts '  type \'T\' to tidy your code from duplicating tasks,'\
-       ' the task with higher priority will be kept'
-  puts '  Q - quits the application'
-end
-
-def parse_command(line)
-  if line == ''
-    puts '  :| Nothing to Add - Try \'A todo description\''
-  else
-    letter = line[0]
-    stripped = line[1..-1].strip
-    case letter
-    when 'A'
-      add_todo(stripped)
-    when 'L'
-      list_todo(stripped)
-    when 'P'
-      set_priority(stripped)
-    when '+'
-      increase_priority(stripped)
-    when '='
-      list_todo_from(stripped)
-    when 'D'
-      delete_todo(stripped)
-    when 'T'
-      tidy_todo()
-    when 'H'
-      help()
-    else
-      puts 'Commands: Q-uit, A-dd. L-ist, H-elp, P-riority, D-elete, T-idy'
-    end
-  end
-end
-
-# The main command loop
-def main_loop()
-  setup()
-  finished = false
-  while !finished
-    print ':)'
-    line = gets.chomp
-    if line == 'Q'
-      finished = true
-      finished()
-    else
-      parse_command(line)
-    end
-  end
-  exit
+  puts '  To change it type \'P <value from 0 to 9>\' '
+  puts '  To increase the priority value of a task that is already on the list by 1 type \'+ <index>\' '
+  puts '  To view only the tasks of a chosen priority or higher type \'= <value>\' '
+  puts '  To delete a task from the list type \'D <index_of_task>\' '
+  puts '  Type \'T\' to tidy your code from tasks with duplicate descriptions'\
+       ' (the task with higher priority will be kept)'
+  puts '  To view this help message again type \'H\' '
+  puts '  \'Q\' quits the application'
 end
 
 main_loop()
